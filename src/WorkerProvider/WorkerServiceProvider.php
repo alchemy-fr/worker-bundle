@@ -9,6 +9,7 @@ use Alchemy\Worker\TypeBasedWorkerResolver;
 use Alchemy\Worker\WorkerInvoker;
 use Alchemy\WorkerBundle\Commands\DispatchingConsumerCommand;
 use Alchemy\WorkerBundle\Commands\InvokeWorkerCommand;
+use Alchemy\WorkerBundle\Commands\ShowQueueConfigurationCommand;
 use Psr\Log\LoggerAwareInterface;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
@@ -68,6 +69,10 @@ class WorkerServiceProvider implements ServiceProviderInterface
 
         $app['alchemy_worker.commands.run_worker_command'] = $app->share(function (Application $app) {
             return new InvokeWorkerCommand($app['alchemy_worker.worker_resolver']);
+        });
+
+        $app['alchemy_worker.commands.show_configuration'] = $app->share(function (Application $app) {
+            return new ShowQueueConfigurationCommand($app['alchemy_worker.queue_registry']);
         });
     }
 
