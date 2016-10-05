@@ -30,6 +30,8 @@ class WorkerServiceProvider implements ServiceProviderInterface
             if (isset($app[$app['alchemy_worker.logger_service_name']])) {
                 $loggerAware->setLogger($app[$app['alchemy_worker.logger_service_name']]);
             }
+
+            return $loggerAware;
         };
 
         $app['alchemy_worker.process_pool'] = $app->share(function (Application $app) use ($loggerSetter) {
