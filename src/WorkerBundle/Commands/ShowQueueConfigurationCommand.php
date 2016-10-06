@@ -6,6 +6,7 @@ use Alchemy\Queue\MessageQueueRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Yaml;
 
 class ShowQueueConfigurationCommand extends Command
 {
@@ -31,10 +32,10 @@ class ShowQueueConfigurationCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        foreach ($this->queueRegistry->getConfigurations() as $configuration) {
-            var_dump($configuration);
-        }
+        $output->writeln([ '', 'Configured queues: ' ]);
 
-        var_dump($this->queueRegistry->getQueue('worker-queue'));
+        foreach ($this->queueRegistry->getConfigurations() as $name => $configuration) {
+            $output->writeln([ '  ' . $name . ': ' . Yaml::dump($configuration, 0), '' ]);
+        }
     }
 }
