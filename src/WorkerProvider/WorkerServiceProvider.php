@@ -40,7 +40,7 @@ class WorkerServiceProvider implements ServiceProviderInterface
         });
 
         $app['alchemy_worker.worker_invoker'] = $app->share(function (Application $app) use ($loggerSetter) {
-            return $loggerSetter(new WorkerInvoker($app['alchemy_worker.process_pool'], 'prod'));
+            return $loggerSetter(new WorkerInvoker($app['alchemy_worker.process_pool']));
         });
 
         $app['alchemy_worker.queue_registry'] = $app->share(function () use ($loggerSetter) {
