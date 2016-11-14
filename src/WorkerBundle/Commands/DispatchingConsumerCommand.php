@@ -12,8 +12,10 @@
 namespace Alchemy\WorkerBundle\Commands;
 
 use Alchemy\Worker\MessageDispatcher;
+use Alchemy\Worker\WorkerInvoker;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class DispatchingConsumerCommand extends Command
@@ -24,20 +26,28 @@ class DispatchingConsumerCommand extends Command
     private $messageDispatcher;
 
     /**
-     * @param MessageDispatcher $messageDispatcher
+     * @var WorkerInvoker
      */
-    public function __construct(MessageDispatcher $messageDispatcher)
+    private $workerInvoker;
+
+    /**
+     * @param MessageDispatcher $messageDispatcher
+     * @param WorkerInvoker $workerInvoker
+     */
+    public function __construct(MessageDispatcher $messageDispatcher, WorkerInvoker $workerInvoker)
     {
         parent::__construct();
 
         $this->messageDispatcher = $messageDispatcher;
+        $this->workerInvoker = $workerInvoker;
     }
 
     protected function configure()
     {
         parent::configure();
 
-        $this->setName('workers:run-dispatcher');
+        $this->setName('workers:run-dispatcher')
+            ->addOption('preserve-payload', 'p', InputOption::VALUE_NONE);
     }
 
     /**
@@ -47,6 +57,10 @@ class DispatchingConsumerCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($input->getOption('preserve-payload')) {
+            $this->workerInvoker->preservePayloads();
+        }
+
         while (true) {
             $this->messageDispatcher->run();
         }

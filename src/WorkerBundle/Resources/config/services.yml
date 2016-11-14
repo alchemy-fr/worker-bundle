@@ -42,6 +42,7 @@ services:
     class: Alchemy\WorkerBundle\Commands\DispatchingConsumerCommand
     arguments:
       - "@alchemy_worker.message_dispatcher"
+      - "@alchemy_worker.worker_invoker"
     tags:
       - { name: console.command }
 
