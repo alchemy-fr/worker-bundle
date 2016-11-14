@@ -14,6 +14,7 @@ namespace Alchemy\WorkerBundle\Commands;
 use Alchemy\Worker\WorkerResolver;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class InvokeWorkerCommand extends Command
@@ -40,7 +41,8 @@ class InvokeWorkerCommand extends Command
 
         $this->setName('workers:run-worker')
             ->addArgument('type')
-            ->addArgument('body');
+            ->addArgument('body')
+            ->addOption('preserve-payload', 'p', InputOption::VALUE_NONE);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -66,6 +68,8 @@ class InvokeWorkerCommand extends Command
 
         $worker->process($body);
 
-        unlink($input->getArgument('body'));
+        if (! $input->getOption('preserve-payload')) {
+            unlink($input->getArgument('body'));
+        }
     }
 }
