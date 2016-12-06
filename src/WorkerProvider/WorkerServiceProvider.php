@@ -64,7 +64,10 @@ class WorkerServiceProvider implements ServiceProviderInterface
         });
 
         $app['alchemy_worker.commands.run_dispatcher_command'] = $app->share(function (Application $app) {
-            return new DispatchingConsumerCommand($app['alchemy_worker.message_dispatcher']);
+            return new DispatchingConsumerCommand(
+                $app['alchemy_worker.message_dispatcher'],
+                $app['alchemy_worker.worker_invoker']
+            );
         });
 
         $app['alchemy_worker.commands.run_worker_command'] = $app->share(function (Application $app) {
