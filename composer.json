@@ -1,6 +1,13 @@
 {
   "name": "alchemy/worker-bundle",
   "description": "Symfony bundle for alchemy/worker-component",
+  "repositories": [
+    {
+      "packagist.org": false,
+      "type": "vcs",
+      "url": "https://github.com/jygaulier/queue-bundle"
+    }
+  ],
   "authors": [
     {
       "name": "Thibaud Fabre",
@@ -21,14 +28,14 @@
   },
   "license": "MIT",
   "require-dev": {
-    "silex/silex": "^1.3.0",
+    "silex/silex": "^2.0",
     "symfony/symfony": "^2.8",
     "phpunit/phpunit": "^5.4"
   },
   "require": {
     "alchemy/worker-component": "^0.1.0",
-    "alchemy/queue-bundle": "^0.1.5",
-    "php": ">=5.5"
+    "alchemy/queue-bundle": "^2.0.0",
+    "php": "~7.0"
   },
   "extra": {
     "branch-alias": {
