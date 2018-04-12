@@ -5,7 +5,7 @@
     {
       "packagist.org": false,
       "type": "vcs",
-      "url": "https://github.com/jygaulier/queue-bundle"
+      "url": "https://github.com/alchemy-fr/queue-bundle"
     }
   ],
   "authors": [
@@ -28,13 +28,13 @@
   },
   "license": "MIT",
   "require-dev": {
-    "silex/silex": "^2.0",
+    "silex/silex": "~2.0",
     "symfony/symfony": "^2.8",
-    "phpunit/phpunit": "^5.4"
+    "phpunit/phpunit": "~6.0"
   },
   "require": {
     "alchemy/worker-component": "^0.1.0",
-    "alchemy/queue-bundle": "^2.0.0",
+    "alchemy/queue-bundle": "~4.1",
     "php": "~7.0"
   },
   "extra": {
