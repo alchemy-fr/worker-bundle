@@ -42,7 +42,7 @@ class DispatchingConsumerCommand extends Command
         $this->workerInvoker = $workerInvoker;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -53,9 +53,9 @@ class DispatchingConsumerCommand extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|null|void
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('preserve-payload')) {
             $this->workerInvoker->preservePayloads();

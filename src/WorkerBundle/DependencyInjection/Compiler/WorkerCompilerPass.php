@@ -23,7 +23,7 @@ class WorkerCompilerPass implements CompilerPassInterface
      *
      * @param ContainerBuilder $container
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (! $container->hasDefinition('alchemy_worker.type_based_worker_resolver')) {
             return;

@@ -11,8 +11,8 @@ use Alchemy\WorkerBundle\Commands\DispatchingConsumerCommand;
 use Alchemy\WorkerBundle\Commands\InvokeWorkerCommand;
 use Alchemy\WorkerBundle\Commands\ShowQueueConfigurationCommand;
 use Psr\Log\LoggerAwareInterface;
-use Silex\Application;
-use Silex\ServiceProviderInterface;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 
 class WorkerServiceProvider implements ServiceProviderInterface
 {
@@ -23,7 +23,7 @@ class WorkerServiceProvider implements ServiceProviderInterface
      * This method should only be used to configure services and parameters.
      * It should not get services.
      */
-    public function register(Application $app)
+    public function register(Container $app)
     {
         $this->registerDefaultParameters($app);
 
@@ -35,54 +35,54 @@ class WorkerServiceProvider implements ServiceProviderInterface
             return $loggerAware;
         };
 
-        $app['alchemy_worker.process_pool'] = $app->share(function (Application $app) use ($loggerSetter) {
+        $app['alchemy_worker.process_pool'] = function (Container $app) use ($loggerSetter) {
             return $loggerSetter(new ProcessPool($app['alchemy_worker.process_pool_size']));
-        });
+        };
 
-        $app['alchemy_worker.worker_invoker'] = $app->share(function (Application $app) use ($loggerSetter) {
+        $app['alchemy_worker.worker_invoker'] = function (Container $app) use ($loggerSetter) {
             return $loggerSetter(new WorkerInvoker($app['alchemy_worker.process_pool']));
-        });
+        };
 
-        $app['alchemy_worker.queue_registry'] = $app->share(function () use ($loggerSetter) {
+        $app['alchemy_worker.queue_registry'] = function () use ($loggerSetter) {
             return $loggerSetter(new MessageQueueRegistry());
-        });
+        };
 
-        $app['alchemy_worker.message_dispatcher'] = $app->share(function (Application $app) use ($loggerSetter) {
+        $app['alchemy_worker.message_dispatcher'] = function (Container $app) use ($loggerSetter) {
             return $loggerSetter(new MessageDispatcher(
                 $app['alchemy_worker.worker_invoker'],
                 $app['alchemy_worker.queue_registry'],
                 $app['alchemy_worker.queue_name']
             ));
-        });
+        };
 
-        $app['alchemy_worker.type_based_worker_resolver'] = $app->share(function () {
+        $app['alchemy_worker.type_based_worker_resolver'] = function () {
             return new TypeBasedWorkerResolver();
-        });
+        };
 
-        $app['alchemy_worker.worker_resolver'] = $app->share(function (Application $app) {
+        $app['alchemy_worker.worker_resolver'] = function (Container $app) {
             return $app['alchemy_worker.type_based_worker_resolver'];
-        });
+        };
 
-        $app['alchemy_worker.commands.run_dispatcher_command'] = $app->share(function (Application $app) {
+        $app['alchemy_worker.commands.run_dispatcher_command'] = function (Container $app) {
             return new DispatchingConsumerCommand(
                 $app['alchemy_worker.message_dispatcher'],
                 $app['alchemy_worker.worker_invoker']
             );
-        });
+        };
 
-        $app['alchemy_worker.commands.run_worker_command'] = $app->share(function (Application $app) {
+        $app['alchemy_worker.commands.run_worker_command'] = function (Container $app) {
             return new InvokeWorkerCommand($app['alchemy_worker.worker_resolver']);
-        });
+        };
 
-        $app['alchemy_worker.commands.show_configuration'] = $app->share(function (Application $app) {
+        $app['alchemy_worker.commands.show_configuration'] = function (Container $app) {
             return new ShowQueueConfigurationCommand($app['alchemy_worker.queue_registry']);
-        });
+        };
     }
 
     /**
-     * @param Application $app
+     * @param Container $app
      */
-    protected function registerDefaultParameters(Application $app)
+    protected function registerDefaultParameters(Container $app)
     {
         if (!isset($app['alchemy_worker.logger_service_name'])) {
             $app['alchemy_worker.logger_service_name'] = 'logger';
@@ -95,17 +95,5 @@ class WorkerServiceProvider implements ServiceProviderInterface
         if (!isset($app['alchemy_worker.process_pool_size'])) {
             $app['alchemy_worker.process_pool_size'] = 8;
         }
-    }
-
-    /**
-     * Bootstraps the application.
-     *
-     * This method is called after all services are registered
-     * and should be used for "dynamic" configuration (whenever
-     * a service must be requested).
-     */
-    public function boot(Application $app)
-    {
-        // TODO: Implement boot() method.
     }
 }
