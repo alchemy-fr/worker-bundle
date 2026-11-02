@@ -14,6 +14,7 @@ namespace Alchemy\WorkerBundle;
 use Alchemy\WorkerBundle\DependencyInjection\WorkerExtension;
 use Alchemy\WorkerBundle\DependencyInjection\Compiler\WorkerCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class WorkerBundle extends Bundle
@@ -21,7 +22,7 @@ class WorkerBundle extends Bundle
     /**
      * @param ContainerBuilder $container
      */
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
 
@@ -31,7 +32,7 @@ class WorkerBundle extends Bundle
     /**
      * @return WorkerExtension
      */
-    public function getContainerExtension()
+    public function getContainerExtension(): ?ExtensionInterface
     {
         return new WorkerExtension();
     }

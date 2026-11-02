@@ -25,17 +25,19 @@ class ShowQueueConfigurationCommand extends Command
         $this->queueRegistry = $queueRegistry;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('workers:show-configuration');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln([ '', 'Configured queues: ' ]);
 
         foreach ($this->queueRegistry->getConfigurations() as $name => $configuration) {
             $output->writeln([ '  ' . $name . ': ' . Yaml::dump($configuration, 0), '' ]);
         }
+
+        return Command::SUCCESS;
     }
 }

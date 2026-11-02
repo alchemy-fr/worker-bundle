@@ -35,7 +35,7 @@ class InvokeWorkerCommand extends Command
         $this->workerResolver = $workerResolver;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -45,7 +45,7 @@ class InvokeWorkerCommand extends Command
             ->addOption('preserve-payload', 'p', InputOption::VALUE_NONE);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $type = $input->getArgument('type');
         $body = file_get_contents($input->getArgument('body'));
@@ -53,7 +53,7 @@ class InvokeWorkerCommand extends Command
         if ($body === false) {
             $output->writeln('Unable to read payload file');
 
-            return;
+            return Command::FAILURE;
         }
 
         $body = json_decode($body, true);
@@ -61,7 +61,7 @@ class InvokeWorkerCommand extends Command
         if (json_last_error() !== JSON_ERROR_NONE) {
             $output->writeln('<error>Invalid message body</error>');
 
-            return;
+            return Command::FAILURE;
         }
 
         $worker = $this->workerResolver->getWorker($type, $body);
@@ -71,5 +71,7 @@ class InvokeWorkerCommand extends Command
         if (! $input->getOption('preserve-payload')) {
             unlink($input->getArgument('body'));
         }
+
+        return Command::SUCCESS;
     }
 }
