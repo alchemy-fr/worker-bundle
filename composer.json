@@ -9,7 +9,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "Alchemy\\WorkerBundle\\": "src/WorkerBundle"
+            "Alchemy\\WorkerBundle\\": "src/WorkerBundle",
+            "Alchemy\\WorkerProvider\\": "src/WorkerProvider"
         }
     },
     "autoload-dev": {
@@ -28,17 +29,17 @@
         "symfony/yaml": "^7.4"
     },
     "require": {
-        "php": "^8.5",
-        "alchemy/worker-component": "^6.0",
-        "alchemy/queue-bundle": "^6.0",
-        "psr/log": "^3.0",
+        "php": "^8.2",
+        "alchemy/worker-component": "^5.0",
+        "alchemy/queue-bundle": "^5.0",
+        "psr/log": "^1.0 || ^2.0 || ^3.0",
         "symfony/console": "^7.4",
         "symfony/config": "^7.4",
         "symfony/dependency-injection": "^7.4",
         "symfony/http-kernel": "^7.4"
     },
     "suggest": {
-        "symfony/console": "To use the worker commands (^7.4)",
-        "symfony/yaml": "To use the Symfony bundle and the show-configuration command (^7.4)"
+        "silex/silex": "For the Silex service provider",
+        "pimple/pimple": "For the Silex service provider"
     }
 }
