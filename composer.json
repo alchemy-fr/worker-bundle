@@ -26,7 +26,8 @@
         "symfony/console": "^7.4",
         "symfony/dependency-injection": "^7.4",
         "symfony/http-kernel": "^7.4",
-        "symfony/yaml": "^7.4"
+        "symfony/yaml": "^7.4",
+        "phpspec/prophecy-phpunit": "^2.3"
     },
     "require": {
         "php": "^8.2",
